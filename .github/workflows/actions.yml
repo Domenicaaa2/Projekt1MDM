@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 name: Scrape Data, build and upload Model
+=======
+name: Scrape Data, Build and Upload Model
+>>>>>>> 8d0b45a74fb4111dcb98e12fccfcd18080cb64ca
 
 on:
   push:
@@ -8,6 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+<<<<<<< HEAD
 
       - name: checkout repo content
         uses: actions/checkout@v3 # checkout the repository content to github runner
@@ -36,3 +41,41 @@ jobs:
       - name: upload model
         working-directory: model
         run: python ./save.py -c "${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+=======
+      - name: Checkout repo content
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12.1'
+
+      - name: Install Python packages
+        run: pip install -r requirements.txt
+
+      - name: Run urlscrape spider
+        working-directory: ./spider/spider/spiders
+        run: scrapy runspider urlscrape.py
+
+      - name: Run homegate spider and save output
+        working-directory: ./spider/spider/spiders
+        run: scrapy crawl homegate -o ../../file.jl
+
+      - name: Import data to MongoDB
+        working-directory: ./spider/downloads
+        env:
+          MONGO_DB_URI: ${{ secrets.MONGO_DB_URI }}
+        run: python mongo_import.py -c listings -i ../file.jl
+
+      - name: Run model script
+        working-directory: ./model
+        env:
+          MONGO_DB_URI: ${{ secrets.MONGO_DB_URI }}
+        run: python model.py
+
+      - name: Save model to Azure Storage
+        working-directory: ./model
+        env:
+          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+        run: python save.py
+>>>>>>> 8d0b45a74fb4111dcb98e12fccfcd18080cb64ca

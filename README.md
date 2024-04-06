@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # HikePlanner
 
 inspired by https://blog.mimacom.com/data-collection-scrapy-hiketime-prediction/
@@ -44,3 +45,6 @@ similar dataset https://www.kaggle.com/datasets/roccoli/gpx-hike-tracks
 * Personalized Model
     * For a specific Hikr user
     * z.B. 100 weitere "neue" Daten eines bestimmten Benutzers 
+=======
+# Projekt1MDM
+>>>>>>> 8d0b45a74fb4111dcb98e12fccfcd18080cb64ca

@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-name: Scrape Data, build and upload Model
-=======
 name: Scrape Data, Build and Upload Model
->>>>>>> 8d0b45a74fb4111dcb98e12fccfcd18080cb64ca
-
 on:
   push:
   workflow_dispatch:
@@ -12,36 +7,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-<<<<<<< HEAD
-
-      - name: checkout repo content
-        uses: actions/checkout@v3 # checkout the repository content to github runner
-
-      - name: setup python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12.1' # install the python version needed
-          cache: 'pip'
-          
-      - name: install python packages
-        run: pip install -r requirements.txt
-          
-      - name: scrape hikr data 
-        working-directory: ./spider
-        run: scrapy crawl gpx -s CLOSESPIDER_PAGECOUNT=50 -o file.jl
-
-      - name: upload data to mongodb
-        working-directory: spider/downloads
-        run: python ./mongo_import.py -c tracks -i ../file.jl -u "${{secrets.MONGODB_URI}}"
-
-      - name: build model
-        working-directory: model
-        run: python ./model.py -u "${{secrets.MONGODB_URI}}"
-
-      - name: upload model
-        working-directory: model
-        run: python ./save.py -c "${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
-=======
       - name: Checkout repo content
         uses: actions/checkout@v3
 
@@ -78,4 +43,3 @@ jobs:
         env:
           AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
         run: python save.py
->>>>>>> 8d0b45a74fb4111dcb98e12fccfcd18080cb64ca

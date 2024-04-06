@@ -1,32 +1,30 @@
 <script>
-    import { dev } from "$app/environment";
+  import { dev } from "$app/environment";
     let url = location.protocol + "//" + location.host;
     if (dev) {
-        url = "http://localhost:5000";
+        url = "http://127.0.0.1:5000/";
     }
+  let count = 0;
 
-    let count = 0;
+  <button on:click={increment}>
+    Clicked {count}
+    {count === 1 ? "time" : "times"}
+  </button>
 
-    function increment() {
-        count++;
-    }
+  let floor = 0.00;
+  let rooms = 0.00;
+  let living_space = 0.00;
 
-    let downhill = 0;
-    let uphill = 0;
-    let length = 0;
+  let predictedPrice = "n.a.";
 
-    let prediction = "n.a.";
-    let din33466 = "n.a.";
-    let sac = "n.a.";
-
-    async function predict() {
+  async function predict() {
         let result = await fetch(
             url +
                 "/api/predict?" +
                 new URLSearchParams({
-                    downhill: downhill,
-                    uphill: uphill,
-                    length: length,
+                    floor: floor,
+                    rooms: rooms,
+                    living_space: living_space,
                 }),
             {
                 method: "GET",
@@ -34,57 +32,77 @@
         );
         let data = await result.json();
         console.log(data);
-        prediction = data.time;
-        din33466 = data.din33466;
-        sac = data.sac;
+        predictedPrice = data.time;
     }
 </script>
 
-<h1>HikePlanner</h1>
-<p>
+<style>
+  .container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .input-group {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .input-group > div {
+    margin: 0 10px;
+  }
+
+  input[type='number'] {
+    padding: 10px;
+    margin-top: 5px;
+    width: 100%;
+  }
+
+  button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+
+  h2 {
+    margin-top: 20px;
+  }
+
+  .banner {
+    background-color: #007bff;
+    color: white;
+    padding: 20px 0;
+    margin-bottom: 30px;
+    font-size: 24px;
+  }
+</style>
+
+<div class="container">
+  <div class="banner">
+    <h1>Mietpreisvorhersage</h1>
+    <p>
     Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation
-</p>
-
-<button on:click={increment}>
-    Clicked {count}
-    {count === 1 ? "time" : "times"}
-</button>
-
-<p>
-    <strong>Abwärts [m]</strong>
-    <label>
-        <input type="number" bind:value={downhill} min="0" max="10000" />
-        <input type="range" bind:value={downhill} min="0" max="10000" />
-    </label>
-</p>
-
-<p>
-    <strong>Aufwärts [m]</strong>
-    <label>
-        <input type="number" bind:value={uphill} min="0" max="10000" />
-        <input type="range" bind:value={uphill} min="0" max="10000" />
-    </label>
-</p>
-
-<p>
-    <strong>Distanz [m]</strong>
-    <label>
-        <input type="number" bind:value={length} min="0" max="30000" />
-        <input type="range" bind:value={length} min="0" max="30000" />
-    </label>
-</p>
-
-<button on:click={predict}>Predict</button>
-
-<p></p>
-<table>
-    <tr>
-        <td>Dauer:</td><td>{prediction}</td>
-    </tr>
-    <tr>
-        <td>DIN33466:</td><td>{din33466}</td>
-    </tr>
-    <tr>
-        <td>SAC:</td><td>{sac}</td>
-    </tr>
-</table>
+    </p>
+  </div>
+  <div class="input-group">
+    <div>
+      <div>Stockwerk</div>
+      <input type="number" bind:value={$floor}>
+    </div>
+    <div>
+      <div>Zimmer</div>
+      <input type="number" bind:value={$rooms}>
+    </div>
+    <div>
+      <div>Wohnfläche (m²)</div>
+      <input type="number" bind:value={$living_space}>
+    </div>
+  </div>
+  <button on:click={predict}>Vorhersage erhalten</button>
+  <h2>Vorhergesagter Preis: {$predictedPrice}</h2>
+</div>

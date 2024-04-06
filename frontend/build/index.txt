@@ -82,20 +82,21 @@
             const rooms = document.getElementById('rooms').value;
             const livingSpace = document.getElementById('living_space').value;
 
-            const url = `http://127.0.0.1:5000/api/predict?living_space=${livingSpace}&floor=${floor}&rooms=${rooms}`;
+            const url = `http://127.0.0.1:5000/`;
 			
             try {
                 const response = await fetch(url);
 				
+    			
                 if (response.ok) {
-					console.log(response)
                     const data = await response.json();
                     document.getElementById('predictedPrice').textContent = `${data.prediction} CHF`;
                 } else {
-                    
+                    console.error('Fehler beim Abrufen der Vorhersage');
+                    document.getElementById('predictedPrice').textContent = "Fehler beim Abrufen der Vorhersage";
                 }
-            } catch (error) {
-                console.error('Fehler catch:', error);
+            } catch (err) {
+                console.error('Fehler:', error);
                 document.getElementById('predictedPrice').textContent = "Fehler beim Abrufen der Vorhersage";
             }
         });

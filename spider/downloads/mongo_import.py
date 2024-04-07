@@ -48,7 +48,10 @@ def save_to_mongodb(file_path, mongo_uri, db_name, collection_name):
 if __name__ == '__main__':
     current_directory = os.path.dirname(__file__)
     file_path = os.path.join(current_directory, '..', 'spider', 'file.jl')
+    mongo_uri = os.getenv('MONGO_DB_URI')  # Stellt sicher, dass dies der korrekte Schlüsselname in deinen GitHub Secrets ist
     db_name = 'mdm-project'
     collection_name = 'listings'
 
-    save_to_mongodb(file_path, db_name, collection_name)
+    # Richtig: Die Reihenfolge der Argumente muss wie in der Funktionsdefinition sein
+    save_to_mongodb(file_path, mongo_uri, db_name, collection_name)
+

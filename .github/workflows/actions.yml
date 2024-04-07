@@ -18,6 +18,10 @@ jobs:
       - name: Install Python packages
         run: pip install -r requirements.txt
 
+      - name: Install jsonlines package
+        run: pip install jsonlines
+
+
       - name: Run urlscrape spider
         working-directory: ./spider/spider/spiders
         run: scrapy runspider urlscrape.py
